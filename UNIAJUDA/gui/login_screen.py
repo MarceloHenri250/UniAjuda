@@ -3,11 +3,12 @@ from tkinter import messagebox
 from controllers.user_controller import UserController
 
 class LoginScreen:
-    def __init__(self, root, show_register, show_recover):
+    def __init__(self, root, show_register, show_recover, show_home):
         # Inicializa a tela de login
         self.root = root
         self.show_register = show_register
         self.show_recover = show_recover
+        self.show_home = show_home
 
         self._build_main_frame()
         self._build_title()
@@ -73,8 +74,7 @@ class LoginScreen:
         user = UserController.autenticar_usuario(identificador, senha)
         if user:
             messagebox.showinfo("Sucesso", f"Bem-vindo, {user.nome}!")
-            self.root.quit()
-            # TODO: Redirecionar para a tela principal da aplicação
+            self.show_home()  # Redireciona para a HomeScreen
         else:
             self.identificador_entry.config(bg="#ffcccc")
             self.senha_entry.config(bg="#ffcccc")

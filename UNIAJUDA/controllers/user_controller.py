@@ -65,3 +65,14 @@ class UserController:
         existe = cursor.fetchone() is not None
         conn.close()
         return existe
+
+    @staticmethod
+    def get_logged_user():
+        # Exemplo: retorna o primeiro usuário cadastrado (ajuste para autenticação real)
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, nome, matricula, curso, email, instituicao, senha FROM usuarios LIMIT 1")
+        row = cursor.fetchone()
+        conn.close()
+        from models.user import User
+        return User(*row) if row else None
