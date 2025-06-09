@@ -7,8 +7,8 @@ class ReportScreen:
     def __init__(self, root, show_home, question_id=None):
         self.root = root
         self.show_home = show_home
-        self.q_controller = QuestionController()
-        self.r_controller = ReportController()
+        self.question_controller = QuestionController()
+        self.report_controller = ReportController()
         self.question_id = question_id
 
         # Cria uma janela modal sobre a Home
@@ -38,7 +38,7 @@ class ReportScreen:
         tk.Label(self.card, text="Denunciar uma postagem", font=("Arial", 22, "bold"), bg="#fff", fg="#d90429").pack(pady=(28, 10))
 
         if self.question_id:
-            q = self.q_controller.get_question_by_id(self.question_id)
+            q = self.question_controller.get_question_by_id(self.question_id)
             tk.Label(self.card, text=f"{q[1]}", font=("Arial", 15, "bold"), bg="#fff").pack(pady=(6, 0))
             tk.Label(self.card, text=f"{q[2]}", font=("Arial", 12), bg="#fff", fg="#495057", wraplength=420, justify="center").pack(pady=(0, 10))
         else:
@@ -81,7 +81,7 @@ class ReportScreen:
         if not reason or reason == "Descreva o motivo da denúncia...":
             messagebox.showwarning("Campo obrigatório", "Descreva o motivo da denúncia antes de enviar.")
             return
-        success = self.r_controller.add_report(self.question_id, reason)
+        success = self.report_controller.add_report(self.question_id, reason)
         if success:
             messagebox.showinfo("Sucesso", "Denúncia enviada com sucesso!")
             self.show_home()

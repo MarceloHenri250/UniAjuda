@@ -55,7 +55,7 @@ class RegisterScreen:
             font=("Arial", 13),
             bg="#2a4d69",
             fg="white",
-            command=self.cadastrar
+            command=self.register
         )
         self.register_btn.grid(row=8, column=0, columnspan=2, pady=(15, 5), sticky="ew")
 
@@ -68,49 +68,49 @@ class RegisterScreen:
         )
         self.back_btn.grid(row=9, column=0, columnspan=2, pady=5, sticky="ew")
 
-    def cadastrar(self):
+    def register(self):
         # Obtém os valores dos campos
-        nome, matricula, curso, email, instituicao, senha, confirma_senha = [e.get() for e in self.entries]
-        erro = False
+        name, registration, course, email, institution, password, confirm_password = [e.get() for e in self.entries]
+        error = False
 
         # Reseta a cor de fundo dos campos
         for entry in self.entries:
             entry.config(bg="white")
 
         # Validação de senha forte: pelo menos 8 caracteres, uma letra maiúscula e um número
-        senha_forte = (
-            len(senha) >= 8 and
-            re.search(r'[A-Z]', senha) and
-            re.search(r'\d', senha)
+        strong_password = (
+            len(password) >= 8 and
+            re.search(r'[A-Z]', password) and
+            re.search(r'\d', password)
         )
 
         # Verifica se todos os campos foram preenchidos
-        if not all([nome, matricula, curso, email, instituicao, senha, confirma_senha]):
+        if not all([name, registration, course, email, institution, password, confirm_password]):
             messagebox.showerror("Erro", "Preencha todos os campos.")
-            erro = True
+            error = True
 
         # Valida a força da senha
-        if not senha_forte:
+        if not strong_password:
             self.entries[5].config(bg="#ffcccc")
             messagebox.showerror(
                 "Erro",
                 "A senha deve ter pelo menos 8 caracteres, uma letra maiúscula e um número."
             )
-            erro = True
+            error = True
 
         # Verifica se as senhas coincidem
-        if senha != confirma_senha:
+        if password != confirm_password:
             self.entries[5].config(bg="#ffcccc")
             self.entries[6].config(bg="#ffcccc")
             messagebox.showerror("Erro", "As senhas não coincidem.")
-            erro = True
+            error = True
 
         # Se houve erro, interrompe o cadastro
-        if erro:
+        if error:
             return
 
         # Tenta cadastrar o usuário usando o UserController
-        if UserController.cadastrar_usuario(nome, matricula, curso, email, instituicao, senha):
+        if UserController.register_user(name, registration, course, email, institution, password):
             messagebox.showinfo("Sucesso", "Usuário cadastrado com sucesso!")
             self.show_login()
         else:

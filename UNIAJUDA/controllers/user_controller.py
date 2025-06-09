@@ -4,16 +4,16 @@ from database import get_connection
 
 class UserController:
     @staticmethod
-    def cadastrar_usuario(nome, matricula, curso, email, instituicao, senha):
+    def register_user(name, registration, course, email, institution, password):
         # Cadastra um novo usuário no sistema.
         conn = get_connection()
         try:
             conn.execute(
                 """
-                INSERT INTO usuarios (nome, matricula, curso, email, instituicao, senha)
+                INSERT INTO users (name, registration, course, email, institution, password)
                 VALUES (?, ?, ?, ?, ?, ?)
                 """,
-                (nome, matricula, curso, email, instituicao, senha)
+                (name, registration, course, email, institution, password)
             )
             conn.commit()
             return True
@@ -23,56 +23,55 @@ class UserController:
             conn.close()
 
     @staticmethod
-    def autenticar_usuario(identificador, senha):
+    def authenticate_user(identifier, password):
         # Autentica o usuário com base na matrícula ou email e senha.
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute(
             """
-            SELECT id, nome, matricula, curso, email, instituicao, senha
-            FROM usuarios
-            WHERE (matricula = ? OR email = ?) AND senha = ?
+            SELECT id, name, registration, course, email, institution, password
+            FROM users
+            WHERE (registration = ? OR email = ?) AND password = ?
             """,
-            (identificador, identificador, senha)
+            (identifier, identifier, password)
         )
         row = cursor.fetchone()
         conn.close()
         return User(*row) if row else None
 
     @staticmethod
-    def atualizar_senha(email, nova_senha):
+    def update_password(email, new_password):
         # Atualiza a senha do usuário com base no email.
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "UPDATE usuarios SET senha = ? WHERE email = ?",
-            (nova_senha, email)
+            "UPDATE users SET password = ? WHERE email = ?",
+            (new_password, email)
         )
         conn.commit()
-        sucesso = cursor.rowcount > 0
+        success = cursor.rowcount > 0
         conn.close()
-        return sucesso
+        return success
 
     @staticmethod
-    def email_existe(email):
+    def email_exists(email):
         # Verifica se o email já está cadastrado.
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT 1 FROM usuarios WHERE email = ?",
+            "SELECT 1 FROM users WHERE email = ?",
             (email,)
         )
-        existe = cursor.fetchone() is not None
+        exists = cursor.fetchone() is not None
         conn.close()
-        return existe
+        return exists
 
     @staticmethod
     def get_logged_user():
         # Exemplo: retorna o primeiro usuário cadastrado (ajuste para autenticação real)
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT id, nome, matricula, curso, email, instituicao, senha FROM usuarios LIMIT 1")
+        cursor.execute("SELECT id, name, registration, course, email, institution, password FROM users LIMIT 1")
         row = cursor.fetchone()
         conn.close()
-        from models.user import User
         return User(*row) if row else None

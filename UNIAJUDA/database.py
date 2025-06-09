@@ -11,26 +11,27 @@ def create_tables():
     cursor = conn.cursor()
     # Cria a tabela de usuários, se não existir
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS usuarios (
+        CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL,
-            matricula TEXT UNIQUE NOT NULL,
-            curso TEXT NOT NULL,
+            name TEXT NOT NULL,
+            registration TEXT UNIQUE NOT NULL,
+            course TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
-            instituicao TEXT NOT NULL,
-            senha TEXT NOT NULL
+            institution TEXT NOT NULL,
+            password TEXT NOT NULL
         );
     """)
-    # Cria a tabela de dúvidas (questions) com user_id, disciplina e votes
+    # Cria a tabela de dúvidas (questions) com user_id, disciplina, votes e anexo
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS questions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
             description TEXT NOT NULL,
-            disciplina TEXT,
+            subject TEXT,
             votes INTEGER DEFAULT 0,
             user_id INTEGER,
-            FOREIGN KEY (user_id) REFERENCES usuarios(id)
+            attachment TEXT,
+            FOREIGN KEY (user_id) REFERENCES users(id)
         );
     """)
     # Cria a tabela de respostas (answers) com user_id
@@ -41,7 +42,7 @@ def create_tables():
             answer TEXT NOT NULL,
             user_id INTEGER,
             FOREIGN KEY (question_id) REFERENCES questions(id),
-            FOREIGN KEY (user_id) REFERENCES usuarios(id)
+            FOREIGN KEY (user_id) REFERENCES users(id)
         );
     """)
     # Cria a tabela de denúncias (reports)
@@ -60,7 +61,7 @@ def create_tables():
             user_id INTEGER NOT NULL,
             question_id INTEGER NOT NULL,
             UNIQUE(user_id, question_id),
-            FOREIGN KEY (user_id) REFERENCES usuarios(id),
+            FOREIGN KEY (user_id) REFERENCES users(id),
             FOREIGN KEY (question_id) REFERENCES questions(id)
         );
     """)
@@ -70,7 +71,7 @@ def create_tables():
 def limpar_banco():
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM usuarios;")
+    cursor.execute("DELETE FROM users;")
     cursor.execute("DELETE FROM questions;")
     cursor.execute("DELETE FROM answers;")
     cursor.execute("DELETE FROM reports;")

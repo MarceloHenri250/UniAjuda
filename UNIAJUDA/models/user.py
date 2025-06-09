@@ -1,14 +1,14 @@
 class User:
-    def __init__(self, id, nome, matricula, curso, email, instituicao, senha):
-        # Inicializa um novo usuário com os atributos fornecidos
-        self.id = id  # Identificador único do usuário
-        self.nome = nome  # Nome do usuário
-        self.matricula = matricula  # Número de matrícula do usuário
-        self.curso = curso  # Curso do usuário
-        self.email = email  # Email do usuário
-        self.instituicao = instituicao  # Instituição do usuário
-        self.senha = senha  # Senha do usuário
+    def __init__(self, user_id, name, registration, course, email, institution, password):
+    
+        self.id = user_id
+        self.name = name
+        self.registration = registration
+        self.course = course
+        self.email = email
+        self.institution = institution
+        self.password = password
 
     def __repr__(self):
-        # Retorna uma representação legível do objeto User
-        return f"<User {self.nome} ({self.matricula})>"
+        
+        return f"<User {self.name} ({self.registration})>"

@@ -33,16 +33,16 @@ class LoginScreen:
             self.frame, text="Matrícula ou E-mail:", font=("Arial", 13),
             bg="#f5f5f5"
         ).grid(row=1, column=0, sticky="e", pady=8, padx=5)
-        self.identificador_entry = tk.Entry(self.frame, font=("Arial", 13), width=25)
-        self.identificador_entry.grid(row=1, column=1, pady=8, ipadx=8, ipady=4)
+        self.identifier_entry = tk.Entry(self.frame, font=("Arial", 13), width=25)
+        self.identifier_entry.grid(row=1, column=1, pady=8, ipadx=8, ipady=4)
 
         # Senha
         tk.Label(
             self.frame, text="Senha:", font=("Arial", 13),
             bg="#f5f5f5"
         ).grid(row=2, column=0, sticky="e", pady=8, padx=5)
-        self.senha_entry = tk.Entry(self.frame, show="*", font=("Arial", 13), width=25)
-        self.senha_entry.grid(row=2, column=1, pady=8, ipadx=8, ipady=4)
+        self.password_entry = tk.Entry(self.frame, show="*", font=("Arial", 13), width=25)
+        self.password_entry.grid(row=2, column=1, pady=8, ipadx=8, ipady=4)
 
     def _build_buttons(self):
         # Entrar
@@ -68,14 +68,14 @@ class LoginScreen:
 
     def login(self):
         # Método para autenticar o usuário
-        identificador = self.identificador_entry.get()
-        senha = self.senha_entry.get()
+        identifier = self.identifier_entry.get()
+        password = self.password_entry.get()
 
-        user = UserController.autenticar_usuario(identificador, senha)
+        user = UserController.authenticate_user(identifier, password)
         if user:
-            messagebox.showinfo("Sucesso", f"Bem-vindo, {user.nome}!")
+            messagebox.showinfo("Sucesso", f"Bem-vindo, {user.name}!")
             self.show_home()  # Redireciona para a HomeScreen
         else:
-            self.identificador_entry.config(bg="#ffcccc")
-            self.senha_entry.config(bg="#ffcccc")
+            self.identifier_entry.config(bg="#ffcccc")
+            self.password_entry.config(bg="#ffcccc")
             messagebox.showerror("Erro", "Matrícula/E-mail ou senha incorretos.")

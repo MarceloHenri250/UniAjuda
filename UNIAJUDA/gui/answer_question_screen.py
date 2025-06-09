@@ -8,8 +8,8 @@ class AnswerQuestionScreen:
     def __init__(self, root, show_home, question_id=None):
         self.root = root
         self.show_home = show_home
-        self.controller = QuestionController()
-        self.a_controller = AnswerController()
+        self.question_controller = QuestionController()
+        self.answer_controller = AnswerController()
         self.user = UserController.get_logged_user()
         self.question_id = question_id
 
@@ -40,7 +40,7 @@ class AnswerQuestionScreen:
         tk.Label(self.card, text="Responder uma dúvida", font=("Arial", 22, "bold"), bg="#fff", fg="#0077b6").pack(pady=(28, 10))
 
         if self.question_id:
-            q = self.controller.get_question_by_id(self.question_id)
+            q = self.question_controller.get_question_by_id(self.question_id)
             tk.Label(self.card, text=f"{q[1]}", font=("Arial", 15, "bold"), bg="#fff").pack(pady=(6, 0))
             tk.Label(self.card, text=f"{q[2]}", font=("Arial", 12), bg="#fff", fg="#495057", wraplength=420, justify="center").pack(pady=(0, 10))
         else:
@@ -86,7 +86,7 @@ class AnswerQuestionScreen:
         if not self.user:
             messagebox.showerror("Erro", "Usuário não identificado.")
             return
-        success = self.a_controller.add_answer(self.question_id, answer, self.user.id)
+        success = self.answer_controller.add_answer(self.question_id, answer, self.user.id)
         if success:
             messagebox.showinfo("Sucesso", "Resposta enviada com sucesso!")
             self.show_home()
