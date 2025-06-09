@@ -63,4 +63,34 @@ class HomeScreen:
         ProfileScreen(self.profile_frame, logout_callback=self.logout)
 
     def logout(self):
-        self.root.destroy()
+        # Ao fazer logout, volta para a tela de login sem fechar o app
+        from controllers.user_controller import UserController
+        if hasattr(UserController, 'set_logged_user'):
+            UserController.set_logged_user(None)
+        else:
+            if hasattr(UserController, '_logged_user'):
+                UserController._logged_user = None
+        # Limpa widgets e chama show_login do main
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        from gui.login_screen import LoginScreen
+        from gui.register_screen import RegisterScreen
+        from gui.recover_screen import RecoverScreen
+        from gui.home_screen import HomeScreen
+        def show_home():
+            for widget in self.root.winfo_children():
+                widget.destroy()
+            HomeScreen(self.root, show_home)
+        def show_register():
+            for widget in self.root.winfo_children():
+                widget.destroy()
+            RegisterScreen(self.root, show_login)
+        def show_recover():
+            for widget in self.root.winfo_children():
+                widget.destroy()
+            RecoverScreen(self.root, show_login)
+        def show_login():
+            for widget in self.root.winfo_children():
+                widget.destroy()
+            LoginScreen(self.root, show_register, show_recover, show_home)
+        show_login()

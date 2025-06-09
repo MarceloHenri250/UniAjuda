@@ -4,16 +4,16 @@ from database import get_connection
 
 class UserController:
     @staticmethod
-    def register_user(name, registration, course, email, institution, password):
+    def register_user(name, registration, course, email, institution, password, avatar=None):
         # Cadastra um novo usuário no sistema.
         conn = get_connection()
         try:
             conn.execute(
                 """
-                INSERT INTO users (name, registration, course, email, institution, password)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO users (name, registration, course, email, institution, password, avatar)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
-                (name, registration, course, email, institution, password)
+                (name, registration, course, email, institution, password, avatar)
             )
             conn.commit()
             return True
@@ -29,7 +29,7 @@ class UserController:
         cursor = conn.cursor()
         cursor.execute(
             """
-            SELECT id, name, registration, course, email, institution, password
+            SELECT id, name, registration, course, email, institution, password, avatar
             FROM users
             WHERE (registration = ? OR email = ?) AND password = ?
             """,
@@ -71,7 +71,21 @@ class UserController:
         # Exemplo: retorna o primeiro usuário cadastrado (ajuste para autenticação real)
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT id, name, registration, course, email, institution, password FROM users LIMIT 1")
+        cursor.execute("SELECT id, name, registration, course, email, institution, password, avatar FROM users LIMIT 1")
         row = cursor.fetchone()
         conn.close()
         return User(*row) if row else None
+
+    @staticmethod
+    def update_user(user_id, name, course, institution, avatar=None):
+        # Atualiza os dados do usuário
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE users SET name = ?, course = ?, institution = ?, avatar = ? WHERE id = ?",
+            (name, course, institution, avatar, user_id)
+        )
+        conn.commit()
+        success = cursor.rowcount > 0
+        conn.close()
+        return success
