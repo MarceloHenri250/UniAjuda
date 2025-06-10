@@ -51,11 +51,6 @@ class ProfileScreen:
             self._render_save_button(parent=btns_frame)
         else:
             self._render_edit_button(parent=btns_frame)
-        # Botão Minhas Perguntas
-        btn_myq = tk.Button(center_inner, text="Minhas Perguntas", font=("Segoe UI", 13, "bold"), bg="#0077b6", fg="#fff", bd=0, relief=tk.FLAT, width=22, height=2, cursor="hand2", activebackground="#023e8a", activeforeground="#fff", highlightthickness=0, command=self._show_my_questions)
-        btn_myq.pack(pady=(10, 0))
-        btn_myq.bind('<Enter>', lambda e: btn_myq.config(bg="#023e8a"))
-        btn_myq.bind('<Leave>', lambda e: btn_myq.config(bg="#0077b6"))
         # Botão Sair
         self._render_logout_button(parent=center_inner)
 
@@ -142,15 +137,6 @@ class ProfileScreen:
         btn.pack(pady=(10, 0))
         btn.bind('<Enter>', lambda e: btn.config(bg="#023e8a"))
         btn.bind('<Leave>', lambda e: btn.config(bg="#0077b6"))
-
-    def _show_my_questions(self):
-        from gui.my_questions_screen import MyQuestionsScreen
-        root = self.parent.winfo_toplevel()
-        def back_to_profile():
-            # Ao voltar, apenas mostra a aba de perfil novamente
-            # (não destrói a tela principal nem as abas)
-            pass  # Não faz nada, pois o ProfileScreen já está na aba
-        MyQuestionsScreen(root, back_to_profile)
 
     def _render_logout_button(self, parent=None):
         parent = parent or self.parent
